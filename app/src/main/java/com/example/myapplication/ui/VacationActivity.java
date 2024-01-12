@@ -1,5 +1,6 @@
 package com.example.myapplication.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,13 +32,11 @@ public class VacationActivity extends AppCompatActivity implements VacationAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vacation);
 
-
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new VacationAdapter(this);
         recyclerView.setAdapter(adapter);
-
-        FloatingActionButton fabAddVacation = findViewById(R.id.fabAddVacation);
+      FloatingActionButton fabAddVacation = findViewById(R.id.fabAddVacation);
         fabAddVacation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
