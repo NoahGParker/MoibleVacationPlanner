@@ -16,7 +16,6 @@ import com.example.myapplication.R;
 public class NotificationReceiver extends BroadcastReceiver {
     public static final String EXTRA_NOTIFICATION_ID = "notification_id";
     public static final String EXTRA_MESSAGE = "message";
-
     @Override
     public void onReceive(Context context, Intent intent) {
         int notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0);
@@ -42,7 +41,6 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentText(message)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setAutoCancel(true);
-
             Notification notification = builder.build();
             notificationManager.notify(notificationId, notification);
         }

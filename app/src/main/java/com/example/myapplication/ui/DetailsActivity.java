@@ -448,12 +448,13 @@ public class DetailsActivity extends AppCompatActivity {
         try {
             Date startDate = dateFormat.parse(startDateStr);
             Date endDate = dateFormat.parse(endDateStr);
+            String vacationTitle = TextTitle.getText().toString();
             Calendar calendarStart = Calendar.getInstance();
             calendarStart.setTime(startDate);
             Calendar calendarEnd = Calendar.getInstance();
             calendarEnd.setTime(endDate);
-            scheduleNotification(calendarStart, NOTIFICATION_ID_START, "Today is the beginning of your vacation!");
-            scheduleNotification(calendarEnd, NOTIFICATION_ID_END, "Today is the end of your vacation!");
+            scheduleNotification(calendarStart, NOTIFICATION_ID_START, "Today starts vacation named- " + vacationTitle + "!");
+            scheduleNotification(calendarEnd, NOTIFICATION_ID_END, "Today is the end of " + vacationTitle + "!");
         } catch (ParseException e) {
             e.printStackTrace();
         }

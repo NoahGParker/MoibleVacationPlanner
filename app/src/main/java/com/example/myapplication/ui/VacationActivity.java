@@ -51,22 +51,15 @@ public  class VacationActivity extends AppCompatActivity implements VacationAdap
                 startActivity(intent);
             }
         });
-
-
         DataBaseForApp database = DataBaseForApp.getInstance(this);
-
-
         vacationDao = database.vacationDao();
-
         updateRecyclerView();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         updateRecyclerView();
     }
-
     private void updateRecyclerView() {
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -77,7 +70,7 @@ public  class VacationActivity extends AppCompatActivity implements VacationAdap
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // Set the retrieved vacations to the adapter
+
                         adapter.setVacations(vacations);
                         adapter.notifyDataSetChanged();
                     }
