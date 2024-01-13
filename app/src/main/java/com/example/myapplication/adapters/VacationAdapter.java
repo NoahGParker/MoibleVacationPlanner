@@ -59,7 +59,7 @@ public class VacationAdapter extends RecyclerView.Adapter<VacationAdapter.Vacati
 
     @Override
     public long getItemId(int position) {
-        return vacations.get(position).vacation.getId(); // Assuming Vacation class has a getId() method
+        return vacations.get(position).vacation.getId();
     }
 
     @Override

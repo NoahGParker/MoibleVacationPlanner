@@ -21,7 +21,7 @@ public class Vacation implements Parcelable {
     private List<Excursion> excursions;
 
     public Vacation() {
-        // Empty constructor required by Room
+
     }
 
     protected Vacation(Parcel in) {

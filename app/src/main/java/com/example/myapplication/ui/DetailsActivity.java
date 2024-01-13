@@ -177,14 +177,14 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (currentVacation != null) {
-                    // Check if the vacation has excursions
+
                     Log.d("VacationDetailsActivity", "Delete button clicked");
                     Executors.newSingleThreadExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
                             List<Excursion> excursions = vacationDao.getAllExcursionsForVacation(currentVacation.getId());
                             if (excursions != null && !excursions.isEmpty()) {
-                                // The vacation has excursions, show a message or perform necessary action
+
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -193,7 +193,7 @@ public class DetailsActivity extends AppCompatActivity {
                                     }
                                 });
                             } else {
-                                // Delete the current vacation
+
                                 Log.d("VacationDetailsActivity", "Deleting vacation");
                                 vacationDao.delete(currentVacation);
                                 finish();
@@ -201,12 +201,11 @@ public class DetailsActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    // Finish the activity
+
                     finish();
                 }
             }
         });
-
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -246,7 +245,7 @@ public class DetailsActivity extends AppCompatActivity {
 
                                         if (endDate != null && chosenStartDate != null && chosenStartDate.after(endDate)) {
                                             Snackbar.make(v, "Start date should be before end date", Snackbar.LENGTH_LONG).show();
-                                            return; // don't update the start date field
+                                            return;
                                         }
                                     } catch (ParseException e) {
                                         e.printStackTrace();
@@ -278,8 +277,6 @@ public class DetailsActivity extends AppCompatActivity {
 
                                 String endDate = dateFormat.format(calendar.getTime());
                                 TextEndDate.setText(endDate);
-
-                                // Check if end date is before start date
                                 String startDateStr = TextStartDate.getText().toString();
                                 try {
                                     Date startDate = dateFormat.parse(startDateStr);
@@ -287,7 +284,7 @@ public class DetailsActivity extends AppCompatActivity {
 
                                     if (chosenEndDate.before(startDate)) {
                                         Snackbar.make(v, "End date should be after start date", Snackbar.LENGTH_LONG).show();
-                                        TextEndDate.setText(""); // clear the end date field
+                                        TextEndDate.setText("");
                                     }
                                 } catch (ParseException e) {
                                     e.printStackTrace();
@@ -301,7 +298,6 @@ public class DetailsActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -365,7 +361,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     private void shareVacationDetails() {
         if (currentVacation != null) {
             Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -385,7 +380,6 @@ public class DetailsActivity extends AppCompatActivity {
                             shareBody.append("Title: ").append(excursion.getTitle()).append("\n");
                         }
                     }
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -402,7 +396,6 @@ public class DetailsActivity extends AppCompatActivity {
             Snackbar.make(TextTitle, "No Vacation Details to Share", Snackbar.LENGTH_SHORT).show();
         }
     }
-
     private void loadExcursions() {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
@@ -419,7 +412,6 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
     }
-
     private void showAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Set Alert")
@@ -427,51 +419,39 @@ public class DetailsActivity extends AppCompatActivity {
                 .setPositiveButton("OK", null)
                 .show();
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_vacation_details, menu);
         return true;
     }
-
-
-
     private void scheduleNotification(Calendar calendar, int notificationId, String message) {
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         notificationIntent.putExtra(NotificationReceiver.EXTRA_NOTIFICATION_ID, notificationId);
         notificationIntent.putExtra(NotificationReceiver.EXTRA_MESSAGE, message);
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 this,
                 notificationId,
                 notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
-
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }
-
     private void setAlert() {
         String startDateStr = TextStartDate.getText().toString();
         String endDateStr = TextEndDate.getText().toString();
-
         if (startDateStr.isEmpty() || endDateStr.isEmpty()) {
             return;
         }
-
         try {
             Date startDate = dateFormat.parse(startDateStr);
             Date endDate = dateFormat.parse(endDateStr);
-
             Calendar calendarStart = Calendar.getInstance();
             calendarStart.setTime(startDate);
-
             Calendar calendarEnd = Calendar.getInstance();
             calendarEnd.setTime(endDate);
-
             scheduleNotification(calendarStart, NOTIFICATION_ID_START, "Today is the beginning of your vacation!");
             scheduleNotification(calendarEnd, NOTIFICATION_ID_END, "Today is the end of your vacation!");
         } catch (ParseException e) {

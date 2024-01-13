@@ -18,18 +18,19 @@ public class Excursion implements Parcelable{
     private int id;
     private String title;
     private int vacationId;
+    private String date;
 
-    // Rest of the code...
-    // Other fields...
+    public String getDate() {return date;}
 
+    public void setDate(String date) { this.date = date; }
     public Excursion() {
-        // Empty constructor required by Room
+
     }
 
     protected Excursion(Parcel in) {
         id = in.readInt();
         title = in.readString();
-        // Read other fields from Parcel...
+
     }
 
     public static final Parcelable.Creator<Excursion> CREATOR = new Parcelable.Creator<Excursion>() {
@@ -67,18 +68,13 @@ public class Excursion implements Parcelable{
     public void setVacationId(int vacationId) {
         this.vacationId = vacationId;
     }
-
-    // Other getter and setter methods...
-
     @Override
     public int describeContents() {
         return 0;
     }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(title);
-        // Write other fields to Parcel...
     }
 }

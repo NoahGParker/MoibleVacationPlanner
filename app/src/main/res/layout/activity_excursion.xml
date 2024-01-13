@@ -6,32 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".UI.ExcursionActivity">
 
+
     <EditText
         android:id="@+id/editTextExcursionTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="304dp"
+        android:layout_height="46dp"
         android:hint="Enter excursion title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonSaveExcursion"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.421"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.027" />
 
+    <EditText
+        android:id="@+id/editTextExcursionDate"
+        android:layout_width="305dp"
+        android:layout_height="45dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="Excursion Date"
+        android:inputType="date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonDeleteExcursion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.114" />
 
     <Button
         android:id="@+id/buttonDeleteExcursion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="61dp"
-        android:background="@android:color/holo_red_dark"
         android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/buttonSaveExcursion"
-        app:layout_constraintVertical_bias="0.004" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/buttonSaveExcursion"

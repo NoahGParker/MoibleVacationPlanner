@@ -68,7 +68,7 @@ public  class VacationActivity extends AppCompatActivity implements VacationAdap
     }
 
     private void updateRecyclerView() {
-        // Retrieve all vacations from the database
+
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -99,7 +99,7 @@ public  class VacationActivity extends AppCompatActivity implements VacationAdap
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                // Check if the vacation has excursions
+
                 if (vacation.excursions != null && !vacation.excursions.isEmpty()) {
                     runOnUiThread(new Runnable() {
                         @Override
