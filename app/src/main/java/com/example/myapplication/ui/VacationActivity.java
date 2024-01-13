@@ -1,31 +1,37 @@
 package com.example.myapplication.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.view.View;
+
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+
 import com.example.myapplication.R;
+import com.example.myapplication.entities.VacationExcursions;
+
 import com.example.myapplication.adapters.VacationAdapter;
 import com.example.myapplication.dao.VacationDao;
 import com.example.myapplication.database.DataBaseForApp;
-import com.example.myapplication.entities.VacationExcursions;
-import com.example.myapplication.adapters.VacationAdapter;
-import com.example.myapplication.dao.VacationDao;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+
 import java.util.concurrent.Executors;
 
-public class VacationActivity extends AppCompatActivity implements VacationAdapter.VacationClickListener{
+
+
+public  class VacationActivity extends AppCompatActivity implements VacationAdapter.VacationClickListener{
     private RecyclerView recyclerView;
     private VacationAdapter adapter;
     private VacationDao vacationDao;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,8 @@ public class VacationActivity extends AppCompatActivity implements VacationAdapt
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new VacationAdapter(this);
         recyclerView.setAdapter(adapter);
-      FloatingActionButton fabAddVacation = findViewById(R.id.fabAddVacation);
+
+        FloatingActionButton fabAddVacation = findViewById(R.id.fabAddVacation);
         fabAddVacation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,10 +52,10 @@ public class VacationActivity extends AppCompatActivity implements VacationAdapt
             }
         });
 
-        // Get an instance of the AppDatabase
+
         DataBaseForApp database = DataBaseForApp.getInstance(this);
 
-        // Get the VacationDao from the AppDatabase
+
         vacationDao = database.vacationDao();
 
         updateRecyclerView();
@@ -97,7 +104,7 @@ public class VacationActivity extends AppCompatActivity implements VacationAdapt
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            // Show a Snackbar message indicating that the vacation cannot be deleted
+
                             Snackbar.make(recyclerView, "Cannot delete vacation with excursions", Snackbar.LENGTH_SHORT).show();
                         }
                     });
@@ -109,8 +116,6 @@ public class VacationActivity extends AppCompatActivity implements VacationAdapt
                         public void run() {
                             adapter.setVacations(vacations);
                             adapter.notifyDataSetChanged();
-
-                            // Show a Snackbar message indicating that the vacation was deleted
                             Snackbar.make(recyclerView, "Vacation deleted", Snackbar.LENGTH_SHORT).show();
                         }
                     });

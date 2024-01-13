@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,25 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.ExcursionActivity"
-            android:label="Excursion Details"
-            android:exported="false">
-
-        </activity>
-
-
-        <activity
-            android:name=".ui.DetailsActivity"
-            android:label="Vacation Details" />
-
-        <activity
-            android:name=".ui.VacationActivity"
-            android:exported="false"
-            android:label="Vacation List"
-            android:parentActivityName=".ui.MainActivity">
-
-        </activity>
 
         <activity
             android:name=".ui.MainActivity"
@@ -43,7 +29,34 @@
             </intent-filter>
 
         </activity>
+        <activity
+            android:name=".ui.ExcursionActivity"
+            android:label="Excursion Details"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
+
+        <activity
+            android:name=".ui.DetailsActivity"
+            android:label="Vacation Details" />
+
+        <activity
+            android:name=".ui.VacationActivity"
+            android:exported="false"
+            android:label="Vacation List"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <receiver
+            android:name=".ui.NotificationReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

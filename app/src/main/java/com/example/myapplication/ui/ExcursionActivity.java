@@ -5,7 +5,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
+import androidx.appcompat.app.ActionBar;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +16,7 @@ import com.example.myapplication.entities.Excursion;
 public class ExcursionActivity extends AppCompatActivity{
     private EditText editTextExcursionTitle;
     private Button buttonSaveExcursion;
+    private Button buttonDeleteExcursion;
 
     private int excursionId;
     private ExcursionDao excursionDao;
@@ -25,14 +26,38 @@ public class ExcursionActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_excursion);
 
-
         editTextExcursionTitle = findViewById(R.id.editTextExcursionTitle);
         buttonSaveExcursion = findViewById(R.id.buttonSaveExcursion);
+        buttonDeleteExcursion = findViewById(R.id.buttonDeleteExcursion);
 
-        excursionId = getIntent().getIntExtra("excursionId", -1);
+        buttonDeleteExcursion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteExcursion();
+            }
+        });
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         DataBaseForApp database = DataBaseForApp.getInstance(this);
         excursionDao = database.excursionDao();
+
+        // Get the excursion ID from the intent.
+        excursionId = getIntent().getIntExtra("EXCURSION_ID", -1);
+        if (excursionId != -1) {
+            Executors.newSingleThreadExecutor().execute(() -> {
+                Excursion excursion = excursionDao.getExcursion(excursionId);
+                if (excursion != null) {
+                    runOnUiThread(() -> {
+                        editTextExcursionTitle.setText(excursion.getTitle());
+
+                    });
+                }
+            });
+        }
 
         buttonSaveExcursion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,10 +65,8 @@ public class ExcursionActivity extends AppCompatActivity{
                 saveExcursion();
             }
         });
-
-        loadExcursion(); // load the excursion details
-
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        loadExcursion();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -58,26 +81,32 @@ public class ExcursionActivity extends AppCompatActivity{
     private void saveExcursion() {
         String excursionTitle = editTextExcursionTitle.getText().toString().trim();
         if (!excursionTitle.isEmpty()) {
-            Excursion updatedExcursion = new Excursion();
-            updatedExcursion.setTitle(excursionTitle);
+            Executors.newSingleThreadExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    Excursion updatedExcursion;
 
-            Intent intent = getIntent();
-            int vacationId = intent.getIntExtra("vacationId", -1);
-            if (vacationId != -1) {
-                updatedExcursion.setVacationId(vacationId);
+                    if (excursionId > 0) {
+                        updatedExcursion = excursionDao.getExcursion(excursionId);
+                        if (updatedExcursion == null) {
+                            return;
+                        }
+                    } else {
+                        updatedExcursion = new Excursion();
+                    }
 
-                Executors.newSingleThreadExecutor().execute(new Runnable() {
-                    @Override
-                    public void run() {
+                    updatedExcursion.setTitle(excursionTitle);
+
+                    Intent intent = getIntent();
+                    int vacationId = intent.getIntExtra("vacationId", -1);
+                    if (vacationId != -1) {
+                        updatedExcursion.setVacationId(vacationId);
+
                         if (excursionId > 0) {
-                            // Excursion already exists, perform update
-                            updatedExcursion.setId(excursionId);
-                            excursionDao.update( updatedExcursion);
+                            excursionDao.update(updatedExcursion);
                         } else {
-                            // Excursion is new, perform insert
                             excursionDao.insert(updatedExcursion);
                         }
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -85,19 +114,15 @@ public class ExcursionActivity extends AppCompatActivity{
                             }
                         });
                     }
-                });
-            }
+                }
+            });
         }
     }
-
-
-
-
     private void loadExcursion() {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                Excursion excursion = (Excursion) excursionDao.getExcursion(excursionId);
+                Excursion excursion = excursionDao.getExcursion(excursionId);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -109,5 +134,26 @@ public class ExcursionActivity extends AppCompatActivity{
             }
         });
     }
+
+    private void deleteExcursion() {
+        if (excursionId > 0) {
+            Executors.newSingleThreadExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    Excursion excursion = excursionDao.getExcursion(excursionId);
+                    if (excursion != null) {
+                        excursionDao.delete(excursion);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
 
 }
